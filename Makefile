@@ -1,0 +1,8 @@
+up:
+	kind create cluster --name kgateway || true
+	docker-compose up -d
+	sh ./hack/install-kgateway.sh
+	sh ./hack/install-httpbin.sh
+
+pf:
+	sh ./hack/port-forward-gateway.sh

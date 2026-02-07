@@ -33,7 +33,13 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /k8s
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
       backendRefs:
         - name: httpbin
           port: 8000

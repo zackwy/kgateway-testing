@@ -5,6 +5,7 @@ apiVersion: gateway.kgateway.dev/v1alpha1
 kind: Backend
 metadata:
   name: fake-ecs-lb
+  namespace: kgateway-system
 spec:
   type: Static
   static:
@@ -16,19 +17,26 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: ecs-backend-route
+  namespace: kgateway-system
 spec:
   parentRefs:
-    - name: kgateway
+    - name: http
       namespace: kgateway-system
   hostnames:
-    - "ecs.kgateway.local"
+    - "kgateway.local"
   rules:
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /ecs
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
       backendRefs:
-      - name: fake-ecs-lb
-        kind: Backend
-        group: gateway.kgateway.dev
+        - name: fake-ecs-lb
+          kind: Backend
+          group: gateway.kgateway.dev
 EOF

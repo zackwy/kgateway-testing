@@ -3,7 +3,6 @@ up:
 	docker-compose up -d
 	sh ./hack/install-kgateway.sh
 	sh ./hack/install-httpbin.sh
-	sh ./hack/setup-fake-ecs-backend.sh
 
 pf:
-	sh ./hack/port-forward-gateway.sh
+	kubectl port-forward deployment/http -n kgateway-system 8080:8080 > /tmp/port-forward.log 2>&1 &
